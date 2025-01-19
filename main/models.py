@@ -22,7 +22,11 @@ class AgeGroup(models.Model):
 class Article(models.Model):
     title = models.CharField(max_length=200)
     content = models.TextField()
-    category = models.ForeignKey(Category, on_delete=models.CASCADE)
-    age_group = models.ForeignKey(AgeGroup, on_delete=models.CASCADE)
+    categories = models.ManyToManyField(Category)
+    age_groups = models.ManyToManyField(AgeGroup)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    def get_preview(self):
+        words = self.content.split()[:50]
+        return ' '.join(words) + '...' if len(self.content.split()) > 50 else self.content

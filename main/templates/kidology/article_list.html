@@ -88,6 +88,13 @@
 <div class="container">
     <h2>Lista artykułów</h2>
 
+     <div class="search-section">
+        <form method="get" class="search-form">
+            {{ search_form.as_p }}
+            <button type="submit" class="btn">Szukaj</button>
+        </form>
+    </div>
+
     {% if user.is_staff or user.is_superuser %}
         <a href="{% url 'article_create' %}" class="btn">Dodaj nowy artykuł</a>
     {% endif %}
@@ -96,7 +103,20 @@
         <ul class="article-list">
         {% for article in articles %}
             <li>
-                <span>{{ article.title }}</span>
+                <div class="article-content">
+                    <h3><a href="{% url 'article_detail' article.pk %}">{{ article.title }}</a></h3>
+                    <p class="article-meta">
+                        Kategorie:
+                        {% for category in article.categories.all %}
+                            {{ category.name }}{% if not forloop.last %}, {% endif %}
+                        {% endfor %}
+                        | Grupy wiekowe:
+                        {% for age_group in article.age_groups.all %}
+                            {{ age_group.name }}{% if not forloop.last %}, {% endif %}
+                        {% endfor %}
+                    </p>
+                    <p>{{ article.get_preview }}</p>
+                </div>
                 {% if user.is_staff or user.is_superuser %}
                     <div class="action-links">
                         <a href="{% url 'article_update' article.pk %}">Edytuj</a>
