@@ -1,0 +1,11 @@
+# Python cache files
+__pycache__/
+*.py[cod]
+*.class
+
+# Django
+*.log
+*.pot
+*.pyc
+db.sqlite3
+media/
