@@ -1,32 +1,57 @@
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.contrib.auth.mixins import UserPassesTestMixin, LoginRequiredMixin
-from .models import Article, Category, AgeGroup
-from django.views.generic import CreateView
-from django.urls import reverse_lazy
 from django.contrib.auth.views import LoginView
-from .forms import CustomUserCreationForm, CustomAuthenticationForm
+from django.urls import reverse_lazy
 from django.contrib import messages
-from .forms import ArticleSearchForm
 from django.db.models import Q
-from django import forms
-from django.forms import ModelForm
+from rest_framework import viewsets
+from rest_framework.decorators import action
 
+from .models import Article
+from .forms import ArticleForm, CustomUserCreationForm, CustomAuthenticationForm, ArticleSearchForm
+from .api.repositories.article_repository import ArticleRepository
+from .api.services.article_service import ArticleService
+from .api.controllers.article_controller import ArticleController
+from .api.repositories.auth_repository import AuthRepository
+from .api.services.auth_service import AuthService
+from .api.controllers.auth_controller import AuthController
+class AuthViewSet(viewsets.ViewSet):
 
-class ArticleForm(ModelForm):
-    categories = forms.ModelMultipleChoiceField(
-        queryset=Category.objects.all(),
-        widget=forms.CheckboxSelectMultiple,
-        required=True
-    )
-    age_groups = forms.ModelMultipleChoiceField(
-        queryset=AgeGroup.objects.all(),
-        widget=forms.CheckboxSelectMultiple,
-        required=True
-    )
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        repository = AuthRepository()
+        service = AuthService(repository)
+        self.controller = AuthController(service)
 
-    class Meta:
-        model = Article
-        fields = ['title', 'content', 'categories', 'age_groups']
+    @action(detail=False, methods=['post'])
+    def login(self, request):
+        return self.controller.login(request)
+
+    @action(detail=False, methods=['post'])
+    def register(self, request):
+        return self.controller.register(request)
+class ArticleViewSet(viewsets.ViewSet):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        repository = ArticleRepository()
+        service = ArticleService(repository)
+        self.controller = ArticleController(service)
+
+    def list(self, request):
+        return self.controller.get_articles(request)
+
+    def retrieve(self, request, pk=None):
+        return self.controller.get_article(request, pk)
+
+    def create(self, request):
+        return self.controller.create_article(request)
+
+    def update(self, request, pk=None):
+        return self.controller.update_article(request, pk)
+
+    def destroy(self, request, pk=None):
+        return self.controller.delete_article(request, pk)
+
 
 class AdminRequiredMixin(UserPassesTestMixin):
     def test_func(self):

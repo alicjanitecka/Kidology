@@ -37,6 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
+    'rest_framework.authtoken',
     'main',
 ]
 
@@ -128,3 +130,12 @@ AUTH_USER_MODEL = 'main.CustomUser'  # Zakładając, że Twoja aplikacja nazywa 
 LOGIN_REDIRECT_URL = 'article_list'  # Strona, na którą użytkownik zostanie przekierowany po zalogowaniu
 LOGIN_URL = 'login'  # URL do strony logowania
 
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+    ]
+}

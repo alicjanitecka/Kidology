@@ -1,8 +1,15 @@
-from django.urls import path
 from django.contrib.auth import views as auth_views
 from . import views
+from django.urls import path, include
+from rest_framework.routers import DefaultRouter
+from .views import ArticleViewSet, AuthViewSet
+
+router = DefaultRouter()
+router.register(r'articles', ArticleViewSet, basename='article')
+router.register(r'auth', AuthViewSet, basename='auth')
 
 urlpatterns = [
+    path('api/', include(router.urls)),
     path('', views.ArticleListView.as_view(), name='article_list'),
     path('article/<int:pk>/', views.ArticleDetailView.as_view(), name='article_detail'),
     path('article/new/', views.ArticleCreateView.as_view(), name='article_create'),

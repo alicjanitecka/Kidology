@@ -1,7 +1,24 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
-from .models import CustomUser, Category, AgeGroup
+from django.forms import ModelForm
+from .models import CustomUser, Category, AgeGroup, Article
 
+
+class ArticleForm(ModelForm):
+    categories = forms.ModelMultipleChoiceField(
+        queryset=Category.objects.all(),
+        widget=forms.CheckboxSelectMultiple,
+        required=True
+    )
+    age_groups = forms.ModelMultipleChoiceField(
+        queryset=AgeGroup.objects.all(),
+        widget=forms.CheckboxSelectMultiple,
+        required=True
+    )
+
+    class Meta:
+        model = Article
+        fields = ['title', 'content', 'categories', 'age_groups']
 class CustomUserCreationForm(UserCreationForm):
     # first_name = forms.CharField(max_length=30, required=True)
     # last_name = forms.CharField(max_length=30, required=True)
