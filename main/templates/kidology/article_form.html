@@ -1,10 +1,88 @@
 {% extends 'kidology/base.html' %}
 
 {% block content %}
-<h2>{% if form.instance.pk %}Edytuj artykuł{% else %}Dodaj nowy artykuł{% endif %}</h2>
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Zapisz</button>
-</form>
+{% block styles %}
+<style>
+    body {
+        font-family: 'Arial', sans-serif;
+        background-color: #f4f7fa;
+        margin: 0;
+        padding: 0;
+    }
+
+    .container {
+        width: 90%;
+        max-width: 800px;
+        margin: 30px auto;
+        padding: 20px;
+        background-color: #fff;
+        border-radius: 10px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    h2 {
+        font-size: 32px;
+        color: #333;
+        text-align: center;
+        margin-bottom: 30px;
+    }
+
+    form {
+        display: flex;
+        flex-direction: column;
+    }
+
+    form .field {
+        margin-bottom: 20px;
+    }
+
+    form label {
+        font-size: 16px;
+        color: #555;
+    }
+
+    form input,
+    form textarea {
+        padding: 12px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+        font-size: 14px;
+        width: 100%;
+        box-sizing: border-box;
+        margin-top: 5px;
+    }
+
+    form input:focus,
+    form textarea:focus {
+        outline: none;
+        border-color: #007bff;
+    }
+
+    form button {
+        background-color: #007bff;
+        color: #fff;
+        padding: 12px;
+        font-weight: bold;
+        cursor: pointer;
+        border: none;
+        border-radius: 5px;
+        font-size: 16px;
+        transition: background-color 0.3s;
+    }
+
+    form button:hover {
+        background-color: #0056b3;
+    }
+</style>
+{% endblock %}
+
+<div class="container">
+    <h2>{% if form.instance.pk %}Edytuj artykuł{% else %}Dodaj nowy artykuł{% endif %}</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Zapisz</button>
+    </form>
+</div>
+
 {% endblock %}

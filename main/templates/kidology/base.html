@@ -7,6 +7,7 @@
     <style>
         body {
             font-family: Arial, sans-serif;
+            background-color: #f4f7fa;
             line-height: 1.6;
             margin: 0;
             padding: 20px;
@@ -14,23 +15,132 @@
         .container {
             max-width: 800px;
             margin: 0 auto;
+            padding: 30px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        h1 {
+            font-size: 36px;
+            color: #333;
+        }
+        nav {
+        display: flex;
+        justify-content: center;
+        margin-top: 10px;
+        }
+
+        nav a, nav form {
+            margin: 0 15px;
+            font-size: 16px;
+            color: #007bff;
+            text-decoration: none;
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+            padding-top: 5px;
+        }
+
+        nav form {
+            display: inline-block;
+            margin-top: -10px;
+        }
+
+        nav a:hover, nav button:hover {
+            text-decoration: underline;
+        }
+
+        nav form button {
+            background-color: #f5f5f5; 
+            border: 2px solid #007bff;
+            color: #007bff;
+            border-radius: 5px;
+            padding: 10px 20px;
+            font-size: 16px;
+            transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+            cursor: pointer;
+        }
+
+        nav form button:hover {
+            background-color: #007bff;
+            color: #fff; 
+            border-color: #0056b3;
+        }
+
+        nav form button:active {
+            background-color: #0056b3;
+            border-color: #003f7d;
+        }
+
         .messages {
             list-style: none;
             padding: 0;
+            margin-bottom: 20px;
         }
         .messages li {
-            padding: 10px;
-            margin-bottom: 10px;
+            padding: 12px;
             border-radius: 5px;
+            font-size: 14px;
+            margin-bottom: 10px;
         }
         .messages .error {
-            background-color: #ffcccc;
-            color: #cc0000;
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
         }
         .messages .success {
-            background-color: #ccffcc;
-            color: #006600;
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            margin-top: 30px;
+        }
+        form input, form button {
+            padding: 12px;
+            margin-bottom: 15px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            font-size: 14px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        form input:focus, form button:focus {
+            outline: none;
+            border-color: #007bff;
+        }
+
+        form button {
+            background-color: #007bff;
+            color: #fff;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        form button:hover {
+            background-color: #0056b3;
+        }
+
+        p {
+            text-align: center;
+            font-size: 14px;
+            color: #555;
+        }
+
+        p a {
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        p a:hover {
+            text-decoration: underline;
         }
     </style>
 </head>

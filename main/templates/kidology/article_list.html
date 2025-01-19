@@ -1,25 +1,113 @@
 {% extends 'kidology/base.html' %}
 
 {% block content %}
-<h2>Lista artykułów</h2>
+{% block styles %}
+<style>
+    body {
+        font-family: 'Arial', sans-serif;
+        background-color: #f4f7fa;
+        margin: 0;
+        padding: 0;
+    }
 
-{% if user.is_staff or user.is_superuser %}
-    <a href="{% url 'article_create' %}" class="btn">Dodaj nowy artykuł</a>
-{% endif %}
+    .container {
+        width: 90%;
+        max-width: 1000px;
+        margin: 30px auto;
+        padding: 20px;
+        background-color: #fff;
+        border-radius: 10px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
 
-{% if articles %}
-    <ul>
-    {% for article in articles %}
-        <li>
-            {{ article.title }}
-            {% if user.is_staff or user.is_superuser %}
-                <a href="{% url 'article_update' article.pk %}">Edytuj</a>
-                <a href="{% url 'article_delete' article.pk %}">Usuń</a>
-            {% endif %}
-        </li>
-    {% endfor %}
-    </ul>
-{% else %}
-    <p>Brak artykułów do wyświetlenia.</p>
-{% endif %}
+    h2 {
+        font-size: 32px;
+        color: #333;
+        text-align: center;
+        margin-bottom: 30px;
+    }
+
+    .btn {
+        background-color: #007bff;
+        color: #fff;
+        padding: 10px 20px;
+        text-decoration: none;
+        border-radius: 5px;
+        font-size: 16px;
+        transition: background-color 0.3s;
+        display: inline-block;
+        margin-bottom: 20px;
+    }
+
+    .btn:hover {
+        background-color: #0056b3;
+    }
+
+    .article-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .article-list li {
+        background-color: #f9f9f9;
+        padding: 15px;
+        border-radius: 8px;
+        margin-bottom: 10px;
+        font-size: 16px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .article-list li .action-links {
+        display: flex;
+        gap: 10px;
+    }
+
+    .article-list li a {
+        color: #007bff;
+        text-decoration: none;
+        font-size: 14px;
+        transition: color 0.3s ease;
+    }
+
+    .article-list li a:hover {
+        color: #0056b3;
+    }
+
+    .no-articles {
+        text-align: center;
+        color: #555;
+        font-size: 16px;
+    }
+</style>
+{% endblock %}
+
+<div class="container">
+    <h2>Lista artykułów</h2>
+
+    {% if user.is_staff or user.is_superuser %}
+        <a href="{% url 'article_create' %}" class="btn">Dodaj nowy artykuł</a>
+    {% endif %}
+
+    {% if articles %}
+        <ul class="article-list">
+        {% for article in articles %}
+            <li>
+                <span>{{ article.title }}</span>
+                {% if user.is_staff or user.is_superuser %}
+                    <div class="action-links">
+                        <a href="{% url 'article_update' article.pk %}">Edytuj</a>
+                        <a href="{% url 'article_delete' article.pk %}">Usuń</a>
+                    </div>
+                {% endif %}
+            </li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p class="no-articles">Brak artykułów do wyświetlenia.</p>
+    {% endif %}
+</div>
 {% endblock %}

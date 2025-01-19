@@ -1,6 +1,72 @@
 {% extends 'kidology/base.html' %}
 
 {% block content %}
+{% block styles %}
+<style>
+    body {
+        font-family: 'Arial', sans-serif;
+        background-color: #f4f7fa;
+        margin: 0;
+        padding: 0;
+    }
+
+    .delete-confirmation {
+        width: 90%;
+        max-width: 600px;
+        margin: 40px auto;
+        padding: 30px;
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        text-align: center;
+    }
+
+    h2 {
+        font-size: 24px;
+        color: #333;
+        margin-bottom: 20px;
+    }
+
+    p {
+        font-size: 16px;
+        color: #555;
+        margin-bottom: 30px;
+    }
+
+    .delete-btn,
+    .cancel-btn {
+        display: inline-block;
+        padding: 12px 30px;
+        font-size: 16px;
+        border-radius: 5px;
+        text-decoration: none;
+        text-align: center;
+        cursor: pointer;
+        transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    .delete-btn {
+        background-color: #e74c3c;
+        color: white;
+        border: none;
+    }
+
+    .delete-btn:hover {
+        background-color: #c0392b;
+    }
+
+    .cancel-btn {
+        background-color: #95a5a6;
+        color: white;
+        margin-left: 15px;
+    }
+
+    .cancel-btn:hover {
+        background-color: #7f8c8d;
+    }
+</style>
+{% endblock %}
+
 <div class="delete-confirmation">
     <h2>Potwierdzenie usunięcia</h2>
     <p>Czy na pewno chcesz usunąć artykuł "{{ object.title }}"?</p>
@@ -11,4 +77,5 @@
         <a href="{% url 'article_list' %}" class="cancel-btn">Anuluj</a>
     </form>
 </div>
+
 {% endblock %}
