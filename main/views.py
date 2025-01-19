@@ -15,10 +15,10 @@ from django.contrib import messages
 
 class AdminRequiredMixin(UserPassesTestMixin):
     def test_func(self):
-        return self.request.user.is_staff or self.request.user.groups.filter(name='Admin').exists()
+        return self.request.user.is_staff or self.request.user.is_superuser
 
 class SignUpView(CreateView):
-    form_class = UserCreationForm
+    form_class = CustomUserCreationForm
     success_url = reverse_lazy('login')
     template_name = 'kidology/signup.html'
 
@@ -36,8 +36,11 @@ class SignUpView(CreateView):
 class CustomLoginView(LoginView):
     form_class = CustomAuthenticationForm
     template_name = 'kidology/login.html'
-    success_url = reverse_lazy('article_list')
+    # success_url = reverse_lazy('article_list')
 
+    def form_valid(self, form):
+        messages.success(self.request, 'Zalogowano pomyślnie.')
+        return super().form_valid(form)
     def form_invalid(self, form):
         messages.error(self.request, 'Niepoprawny adres e-mail lub hasło.')
         return super().form_invalid(form)
@@ -65,4 +68,5 @@ class ArticleUpdateView(LoginRequiredMixin, AdminRequiredMixin, UpdateView):
 
 class ArticleDeleteView(LoginRequiredMixin, AdminRequiredMixin, DeleteView):
     model = Article
+    template_name = 'kidology/article_confirm_delete.html'
     success_url = reverse_lazy('article_list')

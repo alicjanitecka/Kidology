@@ -1,0 +1,25 @@
+{% extends 'kidology/base.html' %}
+
+{% block content %}
+<h2>Lista artykułów</h2>
+
+{% if user.is_staff or user.is_superuser %}
+    <a href="{% url 'article_create' %}" class="btn">Dodaj nowy artykuł</a>
+{% endif %}
+
+{% if articles %}
+    <ul>
+    {% for article in articles %}
+        <li>
+            {{ article.title }}
+            {% if user.is_staff or user.is_superuser %}
+                <a href="{% url 'article_update' article.pk %}">Edytuj</a>
+                <a href="{% url 'article_delete' article.pk %}">Usuń</a>
+            {% endif %}
+        </li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>Brak artykułów do wyświetlenia.</p>
+{% endif %}
+{% endblock %}

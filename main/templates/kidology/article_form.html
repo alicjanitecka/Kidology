@@ -1,0 +1,10 @@
+{% extends 'kidology/base.html' %}
+
+{% block content %}
+<h2>{% if form.instance.pk %}Edytuj artykuł{% else %}Dodaj nowy artykuł{% endif %}</h2>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Zapisz</button>
+</form>
+{% endblock %}
