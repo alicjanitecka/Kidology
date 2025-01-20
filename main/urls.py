@@ -7,7 +7,8 @@ from .web.views.article_views import (
     ArticleListView, ArticleDetailView, ArticleCreateView,
     ArticleUpdateView, ArticleDeleteView
 )
-from .web.views.auth_views import SignUpView, CustomLoginView
+from .web.views.auth_views import SignUpView, CustomLoginView, CustomLogoutView
+
 
 
 router = DefaultRouter()
@@ -21,9 +22,7 @@ urlpatterns = [
     path('article/new/', ArticleCreateView.as_view(), name='article_create'),
     path('article/<int:pk>/edit/', ArticleUpdateView.as_view(), name='article_update'),
     path('article/<int:pk>/delete/', ArticleDeleteView.as_view(), name='article_delete'),
-    # path('login/', CustomLoginView.as_view(template_name='kidology/login.html'), name='login'),
-    path('login/', CustomLoginView.as_view(), name='login'),  # usuń template_name z .as_view()
-
-    path('logout/', LogoutView.as_view(next_page='login'), name='logout'),
+    path('login/', CustomLoginView.as_view(), name='login'),
+    path('logout/', CustomLogoutView.as_view(next_page='login'), name='logout'),
     path('signup/', SignUpView.as_view(), name='signup'),
 ]

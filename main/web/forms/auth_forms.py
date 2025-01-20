@@ -14,15 +14,10 @@ class CustomUserCreationForm(UserCreationForm):
 
     def clean_password1(self):
         password1 = self.cleaned_data.get("password1")
-        if len(password1) < 8:
+        if len(password1) < 15:
             raise forms.ValidationError("Hasło musi mieć co najmniej 15 znaków.")
         return password1
 
-# class CustomAuthenticationForm(AuthenticationForm):
-#     username = forms.EmailField(
-#         widget=forms.TextInput(attrs={'autofocus': True}),
-#         label='Email'  # Dodaj label dla jasności
-#     )
 
 class CustomAuthenticationForm(AuthenticationForm):
     def __init__(self, *args, **kwargs):

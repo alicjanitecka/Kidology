@@ -7,43 +7,33 @@ class ArticleService:
         self.repository = repository
 
     def _is_admin(self, user):
-        """Sprawdzanie uprawnień administratora"""
         return user.is_staff or user.is_superuser
 
     def _validate_article_data(self, article_data):
-        """Walidacja danych artykułu"""
         required_fields = ['title', 'content', 'categories', 'age_groups']
 
-        # Sprawdź czy wszystkie wymagane pola są obecne
         if not all(field in article_data for field in required_fields):
             return False
 
-        # Sprawdź czy tytuł nie jest pusty
         if not article_data['title'].strip():
             return False
 
-        # Sprawdź czy treść nie jest pusta
         if not article_data['content'].strip():
             return False
 
-        # Sprawdź czy wybrano przynajmniej jedną kategorię i grupę wiekową
         if not article_data['categories'] or not article_data['age_groups']:
             return False
 
         return True
     def get_articles(self, filters=None, user=None):
-        """
-        Pobieranie artykułów z uwzględnieniem filtrów i uprawnień użytkownika
-        """
+
         if not user or not user.is_authenticated:
             raise PermissionError("Dostęp tylko dla zalogowanych użytkowników")
 
         return self.repository.get_filtered_articles(filters)
 
     def search_articles(self, query, search_params):
-        """
-        Wyszukiwanie artykułów według różnych kryteriów
-        """
+
         search_in_title = search_params.get('search_in_title', True)
         search_in_content = search_params.get('search_in_content', False)
         categories = search_params.get('categories', [])
@@ -58,9 +48,7 @@ class ArticleService:
         )
 
     def create_article(self, article_data, author):
-        """
-        Tworzenie nowego artykułu z walidacją uprawnień i danych
-        """
+
         if not self._is_admin(author):
             raise PermissionError("Tylko administrator może dodawać artykuły")
 
@@ -73,9 +61,7 @@ class ArticleService:
         return self.repository.create_article(article_data)
 
     def update_article(self, article_id, article_data, author):
-        """
-        Aktualizacja artykułu z walidacją uprawnień
-        """
+
         if not self._is_admin(author):
             raise PermissionError("Tylko administrator może edytować artykuły")
 
@@ -89,9 +75,7 @@ class ArticleService:
         return self.repository.update_article(article_id, article_data)
 
     def delete_article(self, article_id, author):
-        """
-        Usuwanie artykułu z walidacją uprawnień
-        """
+
         if not self._is_admin(author):
             raise PermissionError("Tylko administrator może usuwać artykuły")
 
@@ -102,14 +86,10 @@ class ArticleService:
         self.repository.delete_article(article_id)
 
     def _is_admin(self, user):
-        """
-        Sprawdzanie czy użytkownik jest administratorem
-        """
+
         return user.is_staff or user.is_superuser
 
     def _validate_article_data(self, article_data):
-        """
-        Walidacja danych artykułu
-        """
+
         required_fields = ['title', 'content', 'categories', 'age_groups']
         return all(field in article_data for field in required_fields)

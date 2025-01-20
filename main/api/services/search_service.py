@@ -6,9 +6,7 @@ class SearchService:
         self.repository = repository
 
     def search_articles(self, search_params):
-        """
-        Wyszukiwanie artykułów według zadanych kryteriów
-        """
+
         if not search_params:
             return self.repository.get_all()
 
@@ -27,8 +25,6 @@ class SearchService:
         )
 
     def validate_search_params(self, params):
-        """
-        Walidacja parametrów wyszukiwania
-        """
+
         if not isinstance(params.get('search_in_title', True), bool):
             raise Va
