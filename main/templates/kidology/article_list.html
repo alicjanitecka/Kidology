@@ -3,7 +3,7 @@
 {% block content %}
 {% block styles %}
 <style>
-    body {
+body {
         font-family: 'Arial', sans-serif;
         background-color: #f4f7fa;
         margin: 0;
@@ -27,6 +27,75 @@
         margin-bottom: 30px;
     }
 
+    /* Style dla formularza wyszukiwania */
+    .search-section {
+        margin-bottom: 30px;
+    }
+
+    .search-form {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .search-input-group {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+    }
+
+    .search-input-group input[type="text"] {
+        flex: 1;
+        padding: 8px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        width: 100%;
+        min-width: 300px; /
+    }
+    .search-input-group button {
+        flex: 0 0 auto; /* Nie rozciągaj przycisku */
+        width: auto;    /* Automatyczna szerokość */
+        padding: 8px 15px;
+        min-width: unset;
+    }
+
+    .filter-options {
+        display: flex;
+        gap: 20px;
+        align-items: center;
+    }
+
+    .categories-group, .age-groups-group {
+        display: flex;
+        {#flex-wrap: wrap;#}
+        flex-direction: column;
+        gap: 5px;
+        {#align-items: center;#}
+    }
+    .categories-group strong, .age-groups-group strong {
+        margin-bottom: 5px;  /* dodane */
+    }
+    .categories-group ul, .age-groups-group ul {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 15px;
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+    .categories-group li, .age-groups-group li {
+        display: flex;
+        align-items: center;
+        white-space: nowrap; /* dodane */
+        margin-right: 15px;
+    }
+    .categories-group label, .age-groups-group label {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+}
+    /* Style dla przycisków */
     .btn {
         background-color: #007bff;
         color: #fff;
@@ -34,15 +103,34 @@
         text-decoration: none;
         border-radius: 5px;
         font-size: 16px;
+        border: none;
+        cursor: pointer;
         transition: background-color 0.3s;
-        display: inline-block;
-        margin-bottom: 20px;
     }
-
+    {#.search-btn {#}
+    {#    padding: 8px 15px;#}
+    {#    min-width: 80px;#}
+    {#}#}
     .btn:hover {
         background-color: #0056b3;
     }
 
+    .reset-button {
+        display: inline-block;
+        padding: 10px 20px;
+        background-color: #dc3545;
+        color: white;
+        text-decoration: none;
+        border-radius: 5px;
+        transition: background-color 0.3s;
+    }
+
+    .reset-button:hover {
+        background-color: #c82333;
+        color: white;
+    }
+
+    /* Style dla listy artykułów */
     .article-list {
         list-style: none;
         padding: 0;
@@ -70,7 +158,7 @@
         color: #007bff;
         text-decoration: none;
         font-size: 14px;
-        transition: color 0.3s ease;
+        transition: color 0.3s;
     }
 
     .article-list li a:hover {
@@ -87,13 +175,45 @@
 
 <div class="container">
     <h2>Lista artykułów</h2>
+{#    <form method="get">#}
+{#        {{ search_form.as_p }}#}
+{#        <button type="submit">Szukaj</button>#}
+{#        <a href="{% url 'article_list' %}" class="reset-button">Resetuj filtry</a>#}
+{#    </form>#}
 
      <div class="search-section">
-        <form method="get" class="search-form">
-            {{ search_form.as_p }}
-            <button type="submit" class="btn">Szukaj</button>
-        </form>
-    </div>
+    <form method="get" class="search-form">
+         <div class="search-input-group">
+            {{ search_form.search_query }}
+            <button type="submit" class="btn search-btn">Szukaj</button>
+        </div>
+        <div class="filter-options">
+                <label>
+                    {{ search_form.search_in_title }}
+                    Wyszukuj w tytule
+                </label>
+                <label>
+                    {{ search_form.search_in_content }}
+                    Wyszukuj w treści
+                </label>
+        </div>
+
+            <!-- Kategorie -->
+        <div class="categories-group">
+            <strong>Kategorie:</strong>
+            {{ search_form.categories }}
+        </div>
+
+            <!-- Grupy wiekowe -->
+        <div class="age-groups-group">
+            <strong>Wiek:</strong>
+            {{ search_form.age_groups }}
+        </div>
+        <div>
+            <a href="{% url 'article_list' %}" class="reset-button">Resetuj filtry</a>
+        </div>
+    </form>
+</div>
 
     {% if user.is_staff or user.is_superuser %}
         <a href="{% url 'article_create' %}" class="btn">Dodaj nowy artykuł</a>
@@ -114,6 +234,7 @@
                         {% for age_group in article.age_groups.all %}
                             {{ age_group.name }}{% if not forloop.last %}, {% endif %}
                         {% endfor %}
+
                     </p>
                     <p>{{ article.get_preview }}</p>
                 </div>

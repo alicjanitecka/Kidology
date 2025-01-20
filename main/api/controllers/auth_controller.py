@@ -2,6 +2,11 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.authtoken.models import Token
 from main.api.serializers.auth_serializer import UserSerializer, LoginSerializer, RegisterSerializer
+from django.contrib.auth.mixins import UserPassesTestMixin
+
+class AdminRequiredMixin(UserPassesTestMixin):
+    def test_func(self):
+        return self.request.user.is_staff or self.request.user.is_superuser
 
 class AuthController:
     def __init__(self, service):
