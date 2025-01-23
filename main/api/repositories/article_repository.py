@@ -8,8 +8,9 @@ class ArticleRepository:
     def get_by_id(self, article_id):
         return get_object_or_404(Article, id=article_id)
 
-    def create(self, validated_data):
-        return Article.objects.create(**validated_data)
+    def create_article(self, validated_data):
+        article = Article.objects.create(**validated_data)
+        return article
 
     def update(self, article, validated_data):
         for attr, value in validated_data.items():

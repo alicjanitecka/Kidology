@@ -1,8 +1,11 @@
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.authtoken.models import Token
-from main.api.serializers.auth_serializer import UserSerializer, LoginSerializer, RegisterSerializer
 from django.contrib.auth.mixins import UserPassesTestMixin
+from ...exceptions import ValidationError
+
+
+
 
 class AdminRequiredMixin(UserPassesTestMixin):
     def test_func(self):
@@ -13,30 +16,39 @@ class AuthController:
         self.service = service
 
     def login(self, request):
-        serializer = LoginSerializer(data=request.data)
-        if serializer.is_valid():
+        try:
             user = self.service.login_user(
-                serializer.validated_data['email'],
-                serializer.validated_data['password']
+                request.data.get('email'),
+                request.data.get('password')
             )
             token, _ = Token.objects.get_or_create(user=user)
             return Response({
                 'token': token.key,
-                'user': UserSerializer(user).data
+                'user': {
+                    'id': user.id,
+                    'email': user.email,
+                    'username': user.username
+                }
             })
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        except ValidationError as e:
+            return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
     def register(self, request):
-        serializer = RegisterSerializer(data=request.data)
-        if serializer.is_valid():
-            user = self.service.register_user(
-                serializer.validated_data['username'],
-                serializer.validated_data['email'],
-                serializer.validated_data['password']
-            )
+        try:
+            user = self.service.register_user({
+                'username': request.data.get('username'),
+                'email': request.data.get('email'),
+                'password': request.data.get('password')
+            })
             token, _ = Token.objects.get_or_create(user=user)
             return Response({
                 'token': token.key,
-                'user': UserSerializer(user).data
+                'user': {
+                    'id': user.id,
+                    'email': user.email,
+                    'username': user.username
+                }
             }, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        except ValidationError as e:
+            return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+

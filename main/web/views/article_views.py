@@ -55,6 +55,16 @@ class ArticleCreateView(LoginRequiredMixin, AdminRequiredMixin, CreateView):
     form_class = ArticleForm
     success_url = reverse_lazy('article_list')
 
+    def form_valid(self, form):
+        # Najpierw zapisz artykuł bez relacji many-to-many
+        self.object = form.save(commit=False)
+        self.object.save()
+
+        # Teraz możesz zapisać relacje many-to-many
+        form.save_m2m()
+
+        return super().form_valid(form)
+
 class ArticleUpdateView(LoginRequiredMixin, AdminRequiredMixin, UpdateView):
     model = Article
     template_name = 'kidology/article_form.html'

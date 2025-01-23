@@ -7,61 +7,13 @@ class AuthService:
     def __init__(self, repository):
         self.repository = repository
 
-    def _validate_email(self, email):
-        try:
-            validate_email(email)
-            return True
-        except DjangoValidationError:
-            return False
-
-    def _validate_password(self, password, password2):
-        if password != password2:
-            return False
-        if len(password) < 8:
-            return False
-        return True
     def register_user(self, user_data):
-
-        if not self._validate_email(user_data['email']):
-            raise ValidationError("Niepoprawny format adresu e-mail")
-
-        if not self._validate_password_strength(user_data['password']):
-            raise ValidationError("Hasło musi mieć minimum 15 znaków")
-
-        if user_data['password'] != user_data['password2']:
-            raise ValidationError("Hasła nie są identyczne")
-
         if self.repository.get_user_by_email(user_data['email']):
             raise ValidationError("Ten email jest już zarejestrowany")
-
         return self.repository.create_user(user_data)
 
     def login_user(self, email, password):
-
         user = self.repository.get_user_by_email(email)
-        if not user:
+        if not user or not user.check_password(password):
             raise ValidationError("Niepoprawny email lub hasło")
-
-        if not self.repository.verify_password(user, password):
-            self._log_failed_login_attempt(email)
-            raise ValidationError("Niepoprawny email lub hasło")
-
-        self._update_last_login(user)
         return user
-
-    def _log_failed_login_attempt(self, email):
-
-        self.repository.log_login_attempt(email, success=False)
-
-    # def _update_last_login(self, user):
-    #
-    #     user.last_login = datetime.now()
-    #     self.repository.update_user(user)
-
-    def _validate_password_strength(self, password):
-
-        if len(password) < 8:
-            return False
-        # Tutaj możesz dodać więcej reguł walidacji hasła
-        return True
-
