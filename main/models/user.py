@@ -3,6 +3,7 @@ from django.db import models
 from django.contrib.auth.base_user import BaseUserManager
 from django.core.exceptions import ValidationError
 
+
 class CustomUserManager(BaseUserManager):
     def create_user(self, email, password, **extra_fields):
         if not email:
@@ -31,7 +32,4 @@ class CustomUser(AbstractUser):
             raise ValidationError("Hasło musi mieć minimum 8 znaków")
         return True
 
-    def log_failed_login(self):
-        # logika logowania nieudanych prób
-        pass
 

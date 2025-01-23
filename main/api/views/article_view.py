@@ -14,9 +14,6 @@ class ArticleViewSet(viewsets.ViewSet):
     def list(self, request):
         return self.controller.get_articles(request)
 
-    # def retrieve(self, request, pk=None):
-    #     return self.controller.get_article(request, pk)
-
     def create(self, request):
         return self.controller.create_article(request)
 

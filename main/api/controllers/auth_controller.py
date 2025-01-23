@@ -5,11 +5,10 @@ from django.contrib.auth.mixins import UserPassesTestMixin
 from ...exceptions import ValidationError
 
 
-
-
 class AdminRequiredMixin(UserPassesTestMixin):
     def test_func(self):
         return self.request.user.is_staff or self.request.user.is_superuser
+
 
 class AuthController:
     def __init__(self, service):

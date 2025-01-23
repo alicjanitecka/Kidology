@@ -1,7 +1,9 @@
 from django.contrib.auth import authenticate
 from main.models import CustomUser
 
+
 class AuthRepository:
+
     def get_user_by_email(self, email):
         return CustomUser.objects.filter(email=email).first()
 
@@ -13,8 +15,4 @@ class AuthRepository:
         )
         return user
 
-    def authenticate_user(self, email, password):
-        user = self.get_user_by_email(email)
-        if user:
-            return authenticate(username=user.username, password=password)
-        return None
+

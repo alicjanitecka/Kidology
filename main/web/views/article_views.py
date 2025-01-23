@@ -45,9 +45,11 @@ class ArticleListView(LoginRequiredMixin, ListView):
         context['search_form'] = ArticleSearchForm(self.request.GET)
         return context
 
+
 class ArticleDetailView(LoginRequiredMixin, DetailView):
     model = Article
     template_name = 'kidology/article_detail.html'
+
 
 class ArticleCreateView(LoginRequiredMixin, AdminRequiredMixin, CreateView):
     model = Article
@@ -65,11 +67,13 @@ class ArticleCreateView(LoginRequiredMixin, AdminRequiredMixin, CreateView):
 
         return super().form_valid(form)
 
+
 class ArticleUpdateView(LoginRequiredMixin, AdminRequiredMixin, UpdateView):
     model = Article
     template_name = 'kidology/article_form.html'
     form_class = ArticleForm
     success_url = reverse_lazy('article_list')
+
 
 class ArticleDeleteView(LoginRequiredMixin, AdminRequiredMixin, DeleteView):
     model = Article

@@ -22,6 +22,7 @@ class SignUpView(CreateView):
                 messages.error(self.request, f"{field}: {error}")
         return super().form_invalid(form)
 
+
 class CustomLoginView(LoginView):
     form_class = CustomAuthenticationForm
     template_name = 'kidology/login.html'
@@ -40,6 +41,8 @@ class CustomLoginView(LoginView):
 
     def get_success_url(self):
         return self.success_url
+
+
 class CustomLogoutView(LogoutView):
     def dispatch(self, request, *args, **kwargs):
         messages.success(request, 'Wylogowano pomyślnie.')

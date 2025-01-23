@@ -1,6 +1,6 @@
 from django import forms
 from django.forms import ModelForm
-from ...models import Article, Category, AgeGroup
+from ...models.article import Article, Category, AgeGroup
 
 
 class ArticleForm(ModelForm):
